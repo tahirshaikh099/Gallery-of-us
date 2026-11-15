@@ -1,523 +1,602 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#20171e">
-<title>The Museum of Us</title>
-
 <style>
-  :root {
-    --pink: #f4bdd1;
-    --gold: #d6b479;
-    --cream: #fff5e8;
-    --muted: #c5b6bf;
-  }
+  /* =========================================
+     THE MUSEUM OF US — DARK WALNUT & AGED GOLD
+     ========================================= */
 
-  * {
-    box-sizing: border-box;
+  :root {
+    --pink: #d3b37a;
+    --gold: #c6a264;
+    --cream: #eee2c9;
+    --muted: #a79980;
   }
 
   body {
-    margin: 0;
-    overflow: hidden;
-    background: #20171e;
+    background: #090807;
     color: var(--cream);
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  ::selection {
+    background: #aa8546;
+    color: #100d09;
+  }
+
+  button,
+  input {
     font-family: "Segoe UI", Arial, sans-serif;
-  }
-
-  button, input {
-    font: inherit;
-  }
-
-  button {
-    cursor: pointer;
   }
 
   button:focus-visible,
   input:focus-visible {
-    outline: 3px solid var(--pink);
-    outline-offset: 4px;
+    outline: 2px solid #e2c288;
+    outline-offset: 5px;
   }
 
-  [hidden] {
-    display: none !important;
-  }
-
-  /* 3D viewport */
+  /* Dark depth behind the architecture */
   #viewport {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    perspective: 850px;
-    perspective-origin: 50% 47%;
+    perspective: 920px;
     background:
-      radial-gradient(ellipse at center, #61454e, #21171f 80%);
-    touch-action: none;
-  }
-
-  #camera {
-    position: absolute;
-    left: 50%;
-    top: 47%;
-    width: 0;
-    height: 0;
-    transform-style: preserve-3d;
-    will-change: transform;
-  }
-
-  .plane {
-    position: absolute;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-  }
-
-  .wall {
-    background:
-      repeating-linear-gradient(
-        90deg,
-        transparent 0 250px,
-        rgba(255,255,255,.035) 250px 252px
-      ),
-      linear-gradient(#805e6b, #624550 70%, #4d3540);
-    border-top: 8px solid #d0af7a;
-    border-bottom: 14px solid #3a2730;
-  }
-
-  .floor {
-    background:
-      repeating-linear-gradient(
-        0deg,
-        transparent 0 118px,
-        rgba(42,26,25,.23) 118px 121px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        #775746 0 128px,
-        #876652 128px 256px,
-        #70513f 256px 384px
+      radial-gradient(
+        ellipse at 50% 42%,
+        #342819 0%,
+        #17120d 42%,
+        #080706 85%
       );
   }
 
-  .ceiling {
-    background: #35252e;
-    border: 8px solid #765768;
-  }
-
-  .end-wall {
+  /* Cinematic edge shading */
+  #viewport::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
     background:
-      radial-gradient(ellipse at 50% 40%, #8a6372, #503541);
-    border: 12px solid #b89867;
-    display: grid;
-    place-items: center;
-    text-align: center;
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, .37),
+        transparent 25%,
+        transparent 72%,
+        rgba(0, 0, 0, .4)
+      ),
+      radial-gradient(
+        ellipse at center,
+        transparent 35%,
+        rgba(0, 0, 0, .48) 100%
+      );
   }
 
-  .end-wall h2 {
-    font: italic 52px Georgia, serif;
-    color: #ffe7ee;
-  }
-
-  .end-wall p {
-    color: #ead3da;
-    font-size: 20px;
-  }
-
-  /* Wall-mounted exhibits */
-  .exhibit {
-    width: 350px;
-    height: 340px;
-    text-align: center;
-    cursor: pointer;
-    outline: none;
-  }
-
-  .frame {
-    position: relative;
-    width: 350px;
-    height: 220px;
-    padding: 11px;
-    border: 3px solid #e8cc94;
+  /* Walnut walls with recessed panel detailing */
+  .wall {
+    border-top: 11px solid #514027;
+    border-bottom: 24px solid #17110b;
     background:
-      linear-gradient(135deg, #e5c68c, #8e6534 30%, #dec18a 60%, #9b713d);
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, .4),
+        transparent 20%,
+        transparent 67%,
+        rgba(0, 0, 0, .38)
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 237px,
+        #100d09 237px 241px,
+        #5c4528 241px 243px,
+        #20180f 243px 249px,
+        transparent 249px 250px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 100px,
+        rgba(198, 162, 100, .12) 100px 102px,
+        rgba(0, 0, 0, .35) 102px 106px,
+        transparent 106px 240px
+      ),
+      repeating-linear-gradient(
+        91deg,
+        #302217 0,
+        #35271a 5px,
+        #291e14 10px,
+        #3b2a1b 13px,
+        #2c2016 18px
+      );
     box-shadow:
-      0 12px 25px rgba(0,0,0,.38),
-      inset 0 0 0 3px #7c5830;
-    transition: box-shadow .3s;
+      inset 0 15px 22px rgba(0, 0, 0, .45),
+      inset 0 -18px 22px rgba(0, 0, 0, .5);
+  }
+
+  /* Aged wooden floorboards */
+  .floor {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(0, 0, 0, .55),
+        transparent 23%,
+        transparent 77%,
+        rgba(0, 0, 0, .55)
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 176px,
+        rgba(0, 0, 0, .6) 176px 180px,
+        rgba(174, 132, 73, .2) 180px 182px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        #3d2a19 0 82px,
+        #17110b 82px 85px,
+        #4b331e 85px 168px,
+        #1b140c 168px 171px,
+        #352416 171px 255px,
+        #17110b 255px 258px
+      );
+  }
+
+  /* Dark plaster ceiling */
+  .ceiling {
+    background:
+      repeating-linear-gradient(
+        90deg,
+        #19150f 0,
+        #211a12 4px,
+        #18140e 9px,
+        #1c1710 15px
+      );
+    border: 10px solid #49351e;
+    box-shadow: inset 0 0 100px #000b;
+  }
+
+  /* New architectural elements */
+  .rustic-beam {
+    background:
+      repeating-linear-gradient(
+        0deg,
+        #24190f 0,
+        #352416 4px,
+        #1a130c 8px,
+        #302113 12px
+      );
+    border: 2px solid #594024;
+    box-shadow:
+      inset 0 3px 1px #98703a33,
+      0 5px 12px #0008;
+  }
+
+  .rustic-pilaster {
+    background:
+      linear-gradient(
+        90deg,
+        #17100a,
+        #554024 18%,
+        #332314 40%,
+        #48321c 68%,
+        #120d08
+      );
+    border: 1px solid #6d512d;
+    box-shadow: 0 0 15px #0006;
+  }
+
+  .rustic-runner {
+    background:
+      linear-gradient(
+        90deg,
+        #21100d 0 3%,
+        #99713d 3% 4%,
+        #32130f 4% 8%,
+        #735029 8% 9%,
+        transparent 9% 91%,
+        #735029 91% 92%,
+        #32130f 92% 96%,
+        #99713d 96% 97%,
+        #21100d 97%
+      ),
+      repeating-linear-gradient(
+        45deg,
+        rgba(188, 139, 67, .12) 0 2px,
+        transparent 2px 25px,
+        rgba(188, 139, 67, .07) 25px 27px,
+        transparent 27px 50px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent 0 25px,
+        rgba(188, 139, 67, .1) 25px 27px,
+        transparent 27px 50px
+      ),
+      #431b16;
+    border: 2px solid #8a6538;
+    box-shadow: 0 0 22px #0008;
+  }
+
+  /* Antique brass picture frames */
+  .frame {
+    padding: 14px;
+    border: 3px solid #b89557;
+    border-radius: 0;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        transparent 0 4px,
+        rgba(0, 0, 0, .13) 4px 6px
+      ),
+      linear-gradient(
+        135deg,
+        #d0af6b 0%,
+        #715022 12%,
+        #bc9752 25%,
+        #594019 42%,
+        #c5a268 60%,
+        #80602f 80%,
+        #d6b87a 100%
+      );
+    box-shadow:
+      inset 0 0 0 2px #33230d,
+      inset 0 0 0 5px #b08c48,
+      inset 0 0 0 7px #513713,
+      0 14px 22px rgba(0, 0, 0, .65);
+  }
+
+  .frame-inner {
+    border: 3px solid #17120b;
+    background: #100e0b;
+    box-shadow: 0 0 0 1px #b9985c;
+  }
+
+  .frame video {
+    background: #080706;
   }
 
   .exhibit.active .frame,
   .exhibit:focus-visible .frame {
     box-shadow:
-      0 0 38px #ffdca14d,
-      0 12px 25px rgba(0,0,0,.38);
-  }
-
-  .frame-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #2a2028;
-  }
-
-  .frame video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #211922;
+      inset 0 0 0 2px #33230d,
+      inset 0 0 0 5px #c3a064,
+      inset 0 0 0 7px #513713,
+      0 0 35px rgba(210, 161, 76, .16),
+      0 14px 25px rgba(0, 0, 0, .7);
   }
 
   .placeholder {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    align-content: center;
-    gap: 9px;
-    padding: 20px;
     background:
-      radial-gradient(circle at 70% 20%, #a77887, transparent 60%),
-      linear-gradient(135deg, #563d4d, #302432);
-    color: #ffe5ee;
+      radial-gradient(
+        ellipse at 50% 25%,
+        rgba(166, 120, 53, .18),
+        transparent 70%
+      ),
+      repeating-linear-gradient(
+        0deg,
+        #17130e 0,
+        #1b160f 2px,
+        #17130e 4px
+      );
+    color: #ddc797;
   }
 
   .placeholder span {
-    font: italic 31px Georgia, serif;
+    font-size: 29px;
   }
 
   .placeholder small {
-    color: #e4cbd6;
-    font-size: 12px;
-    line-height: 1.6;
+    color: #9f8c6b;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
   }
 
+  /* Engraved-style metal plaques */
   .plaque {
     width: 290px;
-    margin: 15px auto 0;
-    padding: 11px 12px;
-    border: 1px solid #c1a471;
-    background: #f4e8d2;
-    color: #553d3e;
-    box-shadow: 0 5px 12px #0002;
+    margin-top: 18px;
+    padding: 12px 14px;
+    border: 1px solid #9f7b40;
+    background:
+      linear-gradient(
+        110deg,
+        #8f6d36,
+        #c5a66a 42%,
+        #ae8a4b 65%,
+        #89632e
+      );
+    color: #251a0c;
+    box-shadow:
+      inset 0 0 0 3px #b9965955,
+      0 5px 12px #0007;
   }
 
   .plaque h3 {
-    margin: 0 0 5px;
-    font: 21px Georgia, serif;
+    font-size: 20px;
+    text-shadow: 0 1px #e9d3a044;
   }
 
   .plaque p {
-    margin: 0;
-    font-size: 11px;
-    line-height: 1.5;
+    color: #3e2b13;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: .04em;
   }
 
   .exhibit-number {
-    position: absolute;
-    left: 50%;
-    top: -45px;
-    transform: translateX(-50%);
-    color: #f0d5ac;
-    font-size: 12px;
-    letter-spacing: .25em;
+    top: -43px;
+    color: #b99a64;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: .34em;
   }
 
+  /* Warm brass picture lamps */
   .wall-light {
-    width: 150px;
-    height: 7px;
-    background: #ffe5b4;
+    height: 9px;
+    border: 1px solid #765324;
+    border-radius: 2px;
+    background:
+      linear-gradient(
+        #b08b48,
+        #d3b375 45%,
+        #73501e 55%,
+        #d9b56f
+      );
     box-shadow:
-      0 0 28px #ffe0a7,
-      0 30px 95px 35px #ffe0a72b;
-    border-radius: 6px;
+      0 7px 11px rgba(255, 205, 115, .65),
+      0 28px 45px 12px rgba(255, 197, 97, .16),
+      0 66px 90px 33px rgba(255, 192, 89, .11);
   }
 
-  /* Interface */
+  .end-wall {
+    border: 12px solid #684d29;
+    background:
+      radial-gradient(
+        ellipse at center,
+        rgba(141, 102, 43, .22),
+        transparent 67%
+      ),
+      repeating-linear-gradient(
+        90deg,
+        #251b11 0 80px,
+        #1c140d 80px 84px
+      );
+    box-shadow: inset 0 0 0 4px #aa854655;
+  }
+
+  .end-wall h2 {
+    color: #d9bc82;
+    font-size: 46px;
+    text-shadow: 0 3px 15px #000;
+  }
+
+  .end-wall p {
+    color: #ad9670;
+    letter-spacing: .12em;
+    font-size: 16px;
+  }
+
+  /* Minimal museum-style interface */
   .topbar {
-    position: fixed;
-    z-index: 5;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    padding: 20px 25px;
-    background: linear-gradient(#21171ee8, transparent);
-    pointer-events: none;
-  }
-
-  .topbar > * {
-    pointer-events: auto;
+    padding: 24px 30px 45px;
+    background:
+      linear-gradient(
+        rgba(7, 6, 5, .95),
+        rgba(7, 6, 5, .45) 60%,
+        transparent
+      );
   }
 
   .brand {
-    font: italic clamp(20px, 4vw, 29px) Georgia, serif;
+    color: #dbc18e;
+    font-size: clamp(21px, 4vw, 29px);
+    font-style: normal;
+    letter-spacing: .035em;
   }
 
   .brand small {
-    display: block;
-    margin-top: 6px;
-    font: 9px "Segoe UI", sans-serif;
-    letter-spacing: .22em;
-    color: #d1b9c5;
-    text-transform: uppercase;
-  }
-
-  .top-actions {
-    display: flex;
-    gap: 8px;
+    margin-top: 9px;
+    color: #8f7c5d;
+    letter-spacing: .25em;
   }
 
   .ui-button {
-    padding: 10px 15px;
-    border: 1px solid #d6b47966;
-    border-radius: 999px;
-    background: #30232de8;
-    color: var(--cream);
+    padding: 10px 16px;
+    border: 1px solid #866a3c;
+    border-radius: 3px;
+    background: rgba(19, 15, 10, .93);
+    color: #d3bc8f;
+    font-size: 11px;
+    letter-spacing: .06em;
     backdrop-filter: blur(12px);
+    transition: background .2s, border-color .2s;
   }
 
   .ui-button:hover {
-    background: #634450;
+    background: #3e2e18;
+    border-color: #d5ae68;
   }
 
   .ui-button.primary {
-    background: #eab1c8;
-    color: #422b37;
-    border-color: #f5cbdc;
+    background:
+      linear-gradient(135deg, #d4b477, #a98140);
+    color: #20170b;
+    border-color: #d2b37a;
   }
 
-  .memory-info {
-    position: fixed;
-    z-index: 5;
-    left: 24px;
-    bottom: 110px;
-    max-width: 310px;
-    padding: 18px 20px;
-    border: 1px solid #d6b47944;
-    border-radius: 18px;
-    background: #251b24dc;
-    backdrop-filter: blur(14px);
-    pointer-events: none;
-  }
-
-  .eyebrow {
-    color: var(--gold);
-    font-size: 9px;
-    letter-spacing: .22em;
-    text-transform: uppercase;
-  }
-
-  .memory-info h2 {
-    margin: 8px 0;
-    font: 25px Georgia, serif;
-  }
-
-  .memory-info p {
-    margin: 0;
-    color: #ddcbd4;
-    font-size: 12px;
-    line-height: 1.7;
-  }
-
-  .bottom-bar {
-    position: fixed;
-    z-index: 5;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border: 1px solid #d6b47944;
-    border-radius: 999px;
-    background: #251b24e8;
-    backdrop-filter: blur(14px);
-    white-space: nowrap;
-  }
-
-  .progress {
-    min-width: 50px;
-    text-align: center;
-    color: #decbb8;
-    font-size: 12px;
-  }
-
-  .walk-controls {
-    position: fixed;
-    z-index: 6;
-    right: 22px;
-    bottom: 110px;
-    display: grid;
-    grid-template-columns: repeat(3, 44px);
-    gap: 6px;
-  }
-
-  .walk-controls button {
-    width: 44px;
-    height: 44px;
-    border: 1px solid #d6b47955;
-    border-radius: 13px;
-    background: #30232de8;
-    color: white;
-    touch-action: none;
-    user-select: none;
-  }
-
-  .walk-controls button:active {
-    background: #9d6b83;
-  }
-
-  .walk-controls .forward {
-    grid-column: 2;
-  }
-
-  .walk-controls .turn-left {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .walk-controls .back {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  .walk-controls .turn-right {
-    grid-column: 3;
-    grid-row: 2;
+  .ui-button.primary:hover {
+    background:
+      linear-gradient(135deg, #e4c68d, #bc9653);
   }
 
   .hint {
-    position: fixed;
-    z-index: 4;
-    top: 96px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: max-content;
-    max-width: calc(100% - 30px);
-    text-align: center;
-    color: #e4cbd6;
-    font-size: 11px;
-    background: #281d267d;
-    border-radius: 20px;
-    padding: 8px 15px;
-    pointer-events: none;
+    top: 105px;
+    padding: 7px 14px;
+    border: 1px solid #8a6c3433;
+    border-radius: 2px;
+    background: #110e0ac9;
+    color: #ab9470;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: .03em;
   }
 
-  /* Welcome, cinema, and upload overlays */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 30;
-    display: grid;
-    place-items: center;
-    padding: 20px;
-    overflow: auto;
-    background: #1b131de8;
-    backdrop-filter: blur(15px);
-  }
-
-  .welcome-card {
-    width: min(620px, 100%);
-    padding: clamp(28px, 6vw, 55px);
-    border: 1px solid #d6b47966;
-    border-radius: 30px;
+  .memory-info {
+    left: 28px;
+    bottom: 107px;
+    max-width: 310px;
+    padding: 17px 20px;
+    border: 0;
+    border-left: 2px solid #b18c4d;
+    border-radius: 0;
     background:
-      radial-gradient(circle at top right, #80516655, transparent 65%),
-      #30232d;
-    text-align: center;
-    box-shadow: 0 35px 100px #0005;
+      linear-gradient(
+        90deg,
+        rgba(12, 10, 7, .94),
+        rgba(12, 10, 7, .68)
+      );
+    backdrop-filter: blur(10px);
   }
 
-  .welcome-card h1 {
-    margin: 18px 0;
-    font: normal clamp(42px, 8vw, 67px)/1.06 Georgia, serif;
+  .eyebrow {
+    color: #b79a64;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 9px;
+    letter-spacing: .23em;
   }
 
-  .welcome-card h1 em {
-    color: var(--pink);
+  .memory-info h2 {
+    color: #e2cda6;
+    font-size: 25px;
+    font-weight: normal;
   }
 
-  .welcome-card p {
-    color: #d6becb;
-    font-size: 14px;
-    line-height: 1.9;
-  }
-
-  .welcome-actions {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 25px 0 18px;
-  }
-
-  .welcome-card .small {
-    font-size: 11px;
-    color: #bba4b1;
-  }
-
-  .cinema-card {
-    position: relative;
-    width: min(1000px, 100%);
-    padding: 15px;
-    border: 1px solid #d6b47966;
-    border-radius: 22px;
-    background: #30232d;
-  }
-
-  .cinema-card video {
-    display: block;
-    width: 100%;
-    max-height: 65vh;
-    background: #110e13;
-    border-radius: 12px;
-  }
-
-  .cinema-details {
-    padding: 18px 5px 5px;
-  }
-
-  .cinema-details h2 {
-    margin: 0 0 8px;
-    font: 28px Georgia, serif;
-  }
-
-  .cinema-details p {
-    color: #d6becb;
-    line-height: 1.7;
-    font-size: 13px;
-  }
-
-  .close-button {
-    float: right;
-    margin-bottom: 12px;
-  }
-
-  .upload-note {
-    padding: 15px;
-    border: 1px dashed #d6b47966;
-    border-radius: 14px;
-    color: #d6becb;
+  .memory-info p {
+    color: #b5a386;
     font-size: 12px;
     line-height: 1.8;
   }
 
+  .bottom-bar {
+    gap: 9px;
+    padding: 9px;
+    border: 1px solid #71562e;
+    border-radius: 4px;
+    background: rgba(12, 10, 7, .94);
+    box-shadow: 0 8px 30px #0007;
+  }
+
+  .progress {
+    color: #b99f71;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: .1em;
+  }
+
+  .walk-controls button {
+    border: 1px solid #7d6238;
+    border-radius: 3px;
+    background: rgba(19, 15, 10, .94);
+    color: #dbc18e;
+  }
+
+  .walk-controls button:active {
+    background: #71532a;
+  }
+
+  /* Entrance and cinema */
+  .overlay {
+    background:
+      radial-gradient(
+        ellipse at 50% 30%,
+        rgba(70, 49, 23, .3),
+        transparent 70%
+      ),
+      rgba(7, 6, 5, .95);
+  }
+
+  .welcome-card {
+    position: relative;
+    padding: clamp(32px, 6vw, 60px);
+    border: 1px solid #9a7942;
+    border-radius: 4px;
+    background:
+      radial-gradient(
+        ellipse at 50% 0,
+        rgba(151, 109, 45, .14),
+        transparent 75%
+      ),
+      #15110c;
+    box-shadow:
+      inset 0 0 0 7px #15110c,
+      inset 0 0 0 8px #7f623233,
+      0 35px 100px #0009;
+  }
+
+  .welcome-card h1 {
+    color: #e8d9ba;
+    font-weight: normal;
+    letter-spacing: -.025em;
+  }
+
+  .welcome-card h1 em {
+    color: #c8a86a;
+  }
+
+  .welcome-card p {
+    color: #ac9b7d;
+  }
+
+  .welcome-card .small {
+    color: #807057;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+
+  .upload-note {
+    border-color: #806437;
+    border-radius: 3px;
+    color: #b4a183;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+
   #file-input {
-    width: 100%;
-    margin: 20px 0;
-    color: #ebd3df;
+    color: #c9b48c;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 12px;
+  }
+
+  #file-input::file-selector-button {
+    margin-right: 12px;
+    padding: 9px 13px;
+    border: 1px solid #967442;
+    background: #352715;
+    color: #dfc99f;
+    cursor: pointer;
   }
 
   #file-status {
-    color: #f0c3d7;
-    min-height: 20px;
-    font-size: 12px;
+    color: #c8aa70;
+  }
+
+  .cinema-card {
+    padding: 18px;
+    border: 1px solid #a27e43;
+    border-radius: 4px;
+    background: #15110c;
+    box-shadow:
+      inset 0 0 0 5px #8f6d2c1c,
+      0 30px 90px #0009;
+  }
+
+  .cinema-card video {
+    border: 1px solid #594322;
+    border-radius: 0;
+    background: #050403;
+  }
+
+  .cinema-details {
+    padding: 20px 5px 6px;
+  }
+
+  .cinema-details h2 {
+    color: #dfc89e;
+  }
+
+  .cinema-details p {
+    color: #ad9b7c;
   }
 
   @media (max-width: 650px) {
@@ -526,18 +605,36 @@
     }
 
     .topbar {
-      padding: 17px 14px;
+      padding: 18px 14px 35px;
+    }
+
+    .brand {
+      font-size: 21px;
+    }
+
+    .brand small {
+      font-size: 7px;
+      letter-spacing: .16em;
+    }
+
+    .top-actions {
+      gap: 6px;
     }
 
     .top-actions .ui-button {
-      padding: 9px 11px;
-      font-size: 11px;
+      padding: 8px 9px;
+      font-size: 10px;
+    }
+
+    .hint {
+      top: 88px;
+      font-size: 9px;
     }
 
     .memory-info {
       left: 12px;
       right: 165px;
-      bottom: 100px;
+      bottom: 107px;
       padding: 12px;
     }
 
@@ -549,787 +646,15 @@
       font-size: 10px;
     }
 
-    .walk-controls {
-      right: 12px;
-      bottom: 104px;
-    }
-
     .bottom-bar {
-      bottom: 15px;
       gap: 6px;
       padding: 8px;
-    }
-
-    .bottom-bar .ui-button {
-      padding: 10px 12px;
-      font-size: 11px;
-    }
-
-    .hint {
-      font-size: 10px;
-      top: 88px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    * {
-      scroll-behavior: auto !important;
-      transition: none !important;
+    .ui-button {
+      transition: none;
     }
   }
 </style>
-</head>
-
-<body>
-  <div id="viewport" aria-label="Interactive three-dimensional memory gallery">
-    <div id="camera"></div>
-  </div>
-
-  <header class="topbar">
-    <div class="brand">
-      The Museum of Us
-      <small>Every little moment belongs here</small>
-    </div>
-
-    <div class="top-actions">
-      <button class="ui-button" id="upload-button">Add videos</button>
-      <button class="ui-button" id="sound-button" aria-pressed="false">
-        Sound off
-      </button>
-    </div>
-  </header>
-
-  <div class="hint">
-    W/S: walk · A/D: sidestep · ←/→: turn · click a frame to watch
-  </div>
-
-  <aside class="memory-info">
-    <span class="eyebrow" id="info-label">Welcome, ButterCup</span>
-    <h2 id="info-title">A gallery of our favourite days.</h2>
-    <p id="info-caption">
-      Walk closer to a frame, or choose Next memory to begin.
-    </p>
-  </aside>
-
-  <nav class="bottom-bar" aria-label="Memory navigation">
-    <button class="ui-button" id="previous-button" aria-label="Previous memory">
-      ← Previous
-    </button>
-    <div class="progress" id="progress">0 / 6</div>
-    <button class="ui-button primary" id="next-button">
-      Next memory →
-    </button>
-    <button class="ui-button" id="watch-button">Watch</button>
-  </nav>
-
-  <div class="walk-controls" aria-label="Walking controls">
-    <button class="forward" data-control="forward" aria-label="Walk forward">↑</button>
-    <button class="turn-left" data-control="left" aria-label="Turn left">↶</button>
-    <button class="back" data-control="back" aria-label="Walk backward">↓</button>
-    <button class="turn-right" data-control="right" aria-label="Turn right">↷</button>
-  </div>
-
-  <!-- Welcome -->
-  <section class="overlay" id="welcome">
-    <div class="welcome-card">
-      <span class="eyebrow">A private exhibition, just for us</span>
-      <h1>Some moments<br>deserve a <em>museum.</em></h1>
-
-      <p>
-        So I made one for ours.<br>
-        A little place to walk through our favourite memories,
-        pause for a while, and fall in love with them again.
-      </p>
-
-      <div class="welcome-actions">
-        <button class="ui-button primary" id="enter-button">
-          Enter our museum →
-        </button>
-        <button class="ui-button" id="welcome-upload">
-          Choose our videos
-        </button>
-      </div>
-
-      <p class="small">
-        Use your keyboard or the on-screen arrows.
-        Videos play when you approach their frames.
-      </p>
-    </div>
-  </section>
-
-  <!-- Local video selection -->
-  <section class="overlay" id="upload-overlay" hidden>
-    <div class="welcome-card">
-      <span class="eyebrow">Curate our little gallery</span>
-      <h1 style="font-size:42px">Add our <em>memories.</em></h1>
-
-      <div class="upload-note">
-        Choose up to six video files. They will be placed in filename order.
-        These selections stay on this device and last until the page is
-        refreshed—they are not uploaded or saved to a server.
-      </div>
-
-      <input id="file-input" type="file" accept="video/*" multiple>
-
-      <div id="file-status" role="status"></div>
-
-      <button class="ui-button primary" id="close-upload">
-        Back to our museum
-      </button>
-    </div>
-  </section>
-
-  <!-- Expanded video -->
-  <section class="overlay" id="cinema" hidden>
-    <div
-      class="cinema-card"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="cinema-title">
-
-      <button class="ui-button close-button" id="close-cinema">
-        Close ✕
-      </button>
-
-      <video id="cinema-video" controls playsinline preload="metadata"></video>
-
-      <div class="cinema-details">
-        <span class="eyebrow" id="cinema-date"></span>
-        <h2 id="cinema-title"></h2>
-        <p id="cinema-caption"></p>
-      </div>
-    </div>
-  </section>
-
-<script>
-(() => {
-  /*
-   * EDIT YOUR MEMORIES HERE.
-   *
-   * Put your video files beside index.html, or use paths such as:
-   * "videos/our-first-date.mp4"
-   *
-   * Leave src empty to use a placeholder until you choose local videos.
-   */
-  const memories = [
-    {
-      title: "Where our story began",
-      date: "Our first little chapter",
-      caption: "I didn’t know it then, but this was the beginning of my favourite story.",
-      src: "",
-      poster: ""
-    },
-    {
-      title: "That smile. That day.",
-      date: "A day I keep replaying",
-      caption: "Somewhere between your laughter and this moment, the world felt softer.",
-      src: "",
-      poster: ""
-    },
-    {
-      title: "Our little adventure",
-      date: "Just you and me",
-      caption: "It was never really about the place. It was about going there with you.",
-      src: "",
-      poster: ""
-    },
-    {
-      title: "The ordinary magic",
-      date: "One beautifully ordinary day",
-      caption: "Nothing extraordinary happened. You were there. That was everything.",
-      src: "",
-      poster: ""
-    },
-    {
-      title: "My favourite view",
-      date: "Another reason to love you",
-      caption: "I could have looked anywhere. I kept looking at you.",
-      src: "",
-      poster: ""
-    },
-    {
-      title: "More of this. Forever.",
-      date: "To all the days still waiting",
-      caption: "This isn’t the end of our museum. We’re still making the memories.",
-      src: "",
-      poster: ""
-    }
-  ];
-
-  const $ = id => document.getElementById(id);
-  const camera = $("camera");
-  const reducedMotion =
-    window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  const HALF_WIDTH = 520;
-  const SPACING = 850;
-  const FIRST_Z = -650;
-  const LENGTH = 1200 + memories.length * SPACING;
-
-  const player = { x: 0, z: 150, yaw: 0 };
-  const keys = new Set();
-  const touchControls = new Set();
-
-  let entered = false;
-  let soundEnabled = false;
-  let activeIndex = -1;
-  let guidedIndex = -1;
-  let journey = null;
-  let lastTime = performance.now();
-  let lastFocus = null;
-
-  const exhibits = [];
-  const objectUrls = [];
-
-  function plane(className, width, height, x, y, z, rotation = "") {
-    const element = document.createElement("div");
-    element.className = `plane ${className}`;
-    element.style.width = `${width}px`;
-    element.style.height = `${height}px`;
-    element.style.marginLeft = `${-width / 2}px`;
-    element.style.marginTop = `${-height / 2}px`;
-    element.style.transform =
-      `translate3d(${x}px, ${y}px, ${z}px) ${rotation}`;
-    camera.appendChild(element);
-    return element;
-  }
-
-  function makeRoom() {
-    plane(
-      "floor", HALF_WIDTH * 2, LENGTH + 1000,
-      0, 250, -LENGTH / 2 + 300, "rotateX(90deg)"
-    );
-
-    plane(
-      "ceiling", HALF_WIDTH * 2, LENGTH + 1000,
-      0, -280, -LENGTH / 2 + 300, "rotateX(-90deg)"
-    );
-
-    // Segment the walls to keep the scene easy to customize.
-    const segmentLength = 1000;
-
-    for (let z = 300; z > -LENGTH; z -= segmentLength) {
-      plane(
-        "wall", segmentLength + 2, 530,
-        -HALF_WIDTH, -15, z - segmentLength / 2, "rotateY(90deg)"
-      );
-
-      plane(
-        "wall", segmentLength + 2, 530,
-        HALF_WIDTH, -15, z - segmentLength / 2, "rotateY(-90deg)"
-      );
-    }
-
-    const endWall = plane(
-      "end-wall", HALF_WIDTH * 2, 530,
-      0, -15, -LENGTH
-    );
-
-    const ending = document.createElement("div");
-    const title = document.createElement("h2");
-    const subtitle = document.createElement("p");
-
-    title.textContent = "And we’re only getting started.";
-    subtitle.textContent = "More memories. More us. ♡";
-
-    ending.append(title, subtitle);
-    endWall.appendChild(ending);
-  }
-
-  function createExhibits() {
-    memories.forEach((memory, index) => {
-      const left = index % 2 === 0;
-      const z = FIRST_Z - index * SPACING;
-
-      const exhibit = plane(
-        "exhibit", 350, 340,
-        left ? -HALF_WIDTH + 9 : HALF_WIDTH - 9,
-        -5,
-        z,
-        left ? "rotateY(90deg)" : "rotateY(-90deg)"
-      );
-
-      exhibit.tabIndex = 0;
-      exhibit.setAttribute("role", "button");
-      exhibit.setAttribute("aria-label", `Watch ${memory.title}`);
-
-      const number = document.createElement("div");
-      number.className = "exhibit-number";
-      number.textContent = `MEMORY ${String(index + 1).padStart(2, "0")}`;
-
-      const frame = document.createElement("div");
-      frame.className = "frame";
-
-      const inner = document.createElement("div");
-      inner.className = "frame-inner";
-
-      const video = document.createElement("video");
-      video.loop = true;
-      video.muted = true;
-      video.playsInline = true;
-      video.preload = "metadata";
-      video.tabIndex = -1;
-      video.setAttribute("aria-hidden", "true");
-
-      if (memory.poster) video.poster = memory.poster;
-
-      const placeholder = document.createElement("div");
-      placeholder.className = "placeholder";
-
-      const placeholderTitle = document.createElement("span");
-      placeholderTitle.textContent = `Chapter ${index + 1}`;
-
-      const placeholderNote = document.createElement("small");
-      placeholderNote.textContent =
-        "A little space for our memory. Add your video to bring it to life.";
-
-      placeholder.append(placeholderTitle, placeholderNote);
-
-      inner.append(video, placeholder);
-      frame.appendChild(inner);
-
-      const plaque = document.createElement("div");
-      plaque.className = "plaque";
-
-      const title = document.createElement("h3");
-      title.textContent = memory.title;
-
-      const date = document.createElement("p");
-      date.textContent = memory.date;
-
-      plaque.append(title, date);
-      exhibit.append(number, frame, plaque);
-
-      plane(
-        "wall-light", 150, 7,
-        left ? -HALF_WIDTH + 15 : HALF_WIDTH - 15,
-        -224,
-        z,
-        left ? "rotateY(90deg)" : "rotateY(-90deg)"
-      );
-
-      const data = {
-        element: exhibit,
-        video,
-        placeholder,
-        placeholderNote,
-        z,
-        left,
-        source: "",
-        playPending: false
-      };
-
-      exhibits.push(data);
-
-      video.addEventListener("loadeddata", () => {
-        placeholder.hidden = true;
-      });
-
-      video.addEventListener("error", () => {
-        placeholder.hidden = false;
-        placeholderNote.textContent =
-          "This video couldn’t load. Check its path or choose another file.";
-      });
-
-      exhibit.addEventListener("click", () => openCinema(index));
-
-      exhibit.addEventListener("keydown", event => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          openCinema(index);
-        }
-      });
-
-      if (memory.src) setSource(index, memory.src);
-    });
-  }
-
-  function setSource(index, source) {
-    const item = exhibits[index];
-
-    item.video.pause();
-    item.source = source;
-    item.placeholder.hidden = false;
-    item.placeholderNote.textContent = "Loading our little memory…";
-    item.video.src = source;
-    item.video.load();
-  }
-
-  function overlayOpen() {
-    return !$("welcome").hidden ||
-           !$("upload-overlay").hidden ||
-           !$("cinema").hidden;
-  }
-
-  function setActive(index) {
-    if (activeIndex === index) return;
-
-    activeIndex = index;
-
-    exhibits.forEach((item, itemIndex) => {
-      item.element.classList.toggle("active", itemIndex === index);
-    });
-
-    if (index < 0) return;
-
-    const memory = memories[index];
-
-    $("info-label").textContent =
-      `Memory ${String(index + 1).padStart(2, "0")} · ${memory.date}`;
-    $("info-title").textContent = memory.title;
-    $("info-caption").textContent = memory.caption;
-    $("progress").textContent = `${index + 1} / ${memories.length}`;
-  }
-
-  function updateNearbyVideo() {
-    let nearest = -1;
-    let distance = Infinity;
-
-    exhibits.forEach((item, index) => {
-      const currentDistance = Math.abs(player.z - item.z);
-
-      if (currentDistance < distance) {
-        distance = currentDistance;
-        nearest = index;
-      }
-    });
-
-    if (nearest >= 0 && distance < 750) {
-      setActive(nearest);
-    }
-
-    exhibits.forEach((item, index) => {
-      const shouldPlay =
-        entered &&
-        !overlayOpen() &&
-        index === nearest &&
-        distance < 750 &&
-        Boolean(item.source);
-
-      item.video.muted = !soundEnabled || !shouldPlay;
-
-      if (shouldPlay) {
-        if (item.video.paused && !item.playPending) {
-          item.playPending = true;
-
-          item.video.play()
-            .catch(() => {
-              // Expanded cinema view remains available if inline play is blocked.
-            })
-            .finally(() => {
-              item.playPending = false;
-            });
-        }
-      } else if (!item.video.paused) {
-        item.video.pause();
-      }
-    });
-  }
-
-  function render() {
-    camera.style.transform =
-      `rotateY(${player.yaw}rad) ` +
-      `translate3d(${-player.x}px, 0px, ${-player.z}px)`;
-  }
-
-  function normalizeAngle(angle) {
-    return Math.atan2(Math.sin(angle), Math.cos(angle));
-  }
-
-  function goToMemory(index) {
-    index = Math.max(0, Math.min(memories.length - 1, index));
-    guidedIndex = index;
-
-    const exhibit = exhibits[index];
-    const targetYaw = exhibit.left ? -Math.PI / 2 : Math.PI / 2;
-
-    journey = {
-      start: performance.now(),
-      duration: reducedMotion.matches ? 0 : 1800,
-      fromX: player.x,
-      fromZ: player.z,
-      fromYaw: player.yaw,
-      toX: 0,
-      toZ: exhibit.z,
-      yawDifference: normalizeAngle(targetYaw - player.yaw)
-    };
-
-    setActive(index);
-  }
-
-  function step(timestamp) {
-    const delta = Math.min((timestamp - lastTime) / 1000, .04);
-    lastTime = timestamp;
-
-    if (entered && !overlayOpen()) {
-      if (journey) {
-        const progress = journey.duration === 0
-          ? 1
-          : Math.min((timestamp - journey.start) / journey.duration, 1);
-
-        const eased = progress * progress * (3 - 2 * progress);
-
-        player.x = journey.fromX + (journey.toX - journey.fromX) * eased;
-        player.z = journey.fromZ + (journey.toZ - journey.fromZ) * eased;
-        player.yaw = journey.fromYaw + journey.yawDifference * eased;
-
-        if (progress === 1) journey = null;
-      } else {
-        let forward = 0;
-        let side = 0;
-        let turn = 0;
-
-        if (keys.has("w") || keys.has("arrowup") || touchControls.has("forward")) {
-          forward++;
-        }
-
-        if (keys.has("s") || keys.has("arrowdown") || touchControls.has("back")) {
-          forward--;
-        }
-
-        if (keys.has("a")) side--;
-        if (keys.has("d")) side++;
-
-        if (keys.has("arrowleft") || touchControls.has("left")) turn--;
-        if (keys.has("arrowright") || touchControls.has("right")) turn++;
-
-        player.yaw += turn * 1.5 * delta;
-
-        const length = Math.hypot(forward, side) || 1;
-        const speed = 340 * delta;
-
-        forward /= length;
-        side /= length;
-
-        player.x +=
-          (Math.sin(player.yaw) * forward +
-           Math.cos(player.yaw) * side) * speed;
-
-        player.z +=
-          (-Math.cos(player.yaw) * forward +
-           Math.sin(player.yaw) * side) * speed;
-
-        player.x = Math.max(-350, Math.min(350, player.x));
-        player.z = Math.max(-LENGTH + 300, Math.min(250, player.z));
-      }
-    }
-
-    render();
-    requestAnimationFrame(step);
-  }
-
-  function enterMuseum() {
-    entered = true;
-    $("welcome").hidden = true;
-    goToMemory(0);
-  }
-
-  function openCinema(index) {
-    const item = exhibits[index];
-
-    if (!item.source) {
-      openUpload();
-      $("file-status").textContent =
-        "Choose your videos to fill the gallery, then click this frame again.";
-      return;
-    }
-
-    keys.clear();
-    touchControls.clear();
-    journey = null;
-
-    lastFocus = document.activeElement;
-
-    const cinemaVideo = $("cinema-video");
-    cinemaVideo.src = item.source;
-    cinemaVideo.currentTime = Number.isFinite(item.video.currentTime)
-      ? item.video.currentTime
-      : 0;
-    cinemaVideo.muted = !soundEnabled;
-    cinemaVideo.volume = .7;
-
-    $("cinema-title").textContent = memories[index].title;
-    $("cinema-date").textContent = memories[index].date;
-    $("cinema-caption").textContent = memories[index].caption;
-
-    $("cinema").hidden = false;
-
-    exhibits.forEach(exhibit => exhibit.video.pause());
-
-    cinemaVideo.play().catch(() => {
-      // Native video controls allow the viewer to start playback.
-    });
-
-    $("close-cinema").focus();
-  }
-
-  function closeCinema() {
-    $("cinema-video").pause();
-    $("cinema").hidden = true;
-
-    if (lastFocus && document.contains(lastFocus)) {
-      lastFocus.focus();
-    }
-  }
-
-  function openUpload() {
-    keys.clear();
-    touchControls.clear();
-    $("upload-overlay").hidden = false;
-    exhibits.forEach(item => item.video.pause());
-    $("file-input").focus();
-  }
-
-  $("enter-button").addEventListener("click", enterMuseum);
-  $("upload-button").addEventListener("click", openUpload);
-  $("welcome-upload").addEventListener("click", openUpload);
-
-  $("close-upload").addEventListener("click", () => {
-    $("upload-overlay").hidden = true;
-  });
-
-  $("close-cinema").addEventListener("click", closeCinema);
-
-  $("next-button").addEventListener("click", () => {
-    const base = activeIndex >= 0 ? activeIndex : guidedIndex;
-    goToMemory(base + 1);
-  });
-
-  $("previous-button").addEventListener("click", () => {
-    const base = activeIndex >= 0 ? activeIndex : guidedIndex;
-    goToMemory(base - 1);
-  });
-
-  $("watch-button").addEventListener("click", () => {
-    openCinema(activeIndex >= 0 ? activeIndex : 0);
-  });
-
-  $("sound-button").addEventListener("click", () => {
-    soundEnabled = !soundEnabled;
-
-    $("sound-button").textContent =
-      soundEnabled ? "Sound on" : "Sound off";
-
-    $("sound-button").setAttribute(
-      "aria-pressed",
-      String(soundEnabled)
-    );
-
-    $("cinema-video").muted = !soundEnabled;
-
-    if (activeIndex >= 0) {
-      const video = exhibits[activeIndex].video;
-      video.muted = !soundEnabled;
-
-      if (entered && !overlayOpen() && exhibits[activeIndex].source) {
-        video.play().catch(() => {});
-      }
-    }
-  });
-
-  $("file-input").addEventListener("change", event => {
-    const files = Array.from(event.target.files)
-      .filter(file =>
-        file.type.startsWith("video/") ||
-        /\.(mp4|webm|mov|m4v|ogv)$/i.test(file.name)
-      )
-      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-      .slice(0, memories.length);
-
-    if (!files.length) {
-      $("file-status").textContent = "Please choose a video file.";
-      return;
-    }
-
-    files.forEach((file, index) => {
-      const url = URL.createObjectURL(file);
-      objectUrls.push(url);
-      setSource(index, url);
-    });
-
-    $("file-status").textContent =
-      `${files.length} ${files.length === 1 ? "memory is" : "memories are"} ready. ` +
-      "Close this panel and enter the gallery.";
-  });
-
-  const movementKeys = [
-    "w", "a", "s", "d",
-    "arrowup", "arrowdown", "arrowleft", "arrowright"
-  ];
-
-  window.addEventListener("keydown", event => {
-    const key = event.key.toLowerCase();
-
-    if (key === "escape") {
-      if (!$("cinema").hidden) closeCinema();
-      else $("upload-overlay").hidden = true;
-      return;
-    }
-
-    if (!entered || overlayOpen()) return;
-
-    if (movementKeys.includes(key)) {
-      event.preventDefault();
-      keys.add(key);
-      journey = null;
-    }
-  });
-
-  window.addEventListener("keyup", event => {
-    keys.delete(event.key.toLowerCase());
-  });
-
-  window.addEventListener("blur", () => {
-    keys.clear();
-    touchControls.clear();
-  });
-
-  document.querySelectorAll("[data-control]").forEach(button => {
-    const control = button.dataset.control;
-
-    button.addEventListener("pointerdown", event => {
-      if (!entered || overlayOpen()) return;
-
-      event.preventDefault();
-      journey = null;
-      touchControls.add(control);
-      button.setPointerCapture(event.pointerId);
-    });
-
-    const release = () => touchControls.delete(control);
-
-    button.addEventListener("pointerup", release);
-    button.addEventListener("pointercancel", release);
-    button.addEventListener("lostpointercapture", release);
-  });
-
-  // Keep keyboard focus inside the expanded video dialog.
-  $("cinema").addEventListener("keydown", event => {
-    if (event.key !== "Tab") return;
-
-    const close = $("close-cinema");
-    const video = $("cinema-video");
-
-    if (event.shiftKey && document.activeElement === close) {
-      event.preventDefault();
-      video.focus();
-    } else if (!event.shiftKey && document.activeElement === video) {
-      event.preventDefault();
-      close.focus();
-    }
-  });
-
-  window.addEventListener("beforeunload", () => {
-    objectUrls.forEach(url => URL.revokeObjectURL(url));
-  });
-
-  makeRoom();
-  createExhibits();
-  render();
-
-  setInterval(updateNearbyVideo, 350);
-  requestAnimationFrame(step);
-})();
-</script>
-</body>
-</html>

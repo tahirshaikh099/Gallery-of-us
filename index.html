@@ -1,660 +1,274 @@
-<style>
-  /* =========================================
-     THE MUSEUM OF US — DARK WALNUT & AGED GOLD
-     ========================================= */
-
-  :root {
-    --pink: #d3b37a;
-    --gold: #c6a264;
-    --cream: #eee2c9;
-    --muted: #a79980;
-  }
-
-  body {
-    background: #090807;
-    color: var(--cream);
-    font-family: Georgia, "Times New Roman", serif;
-  }
-
-  ::selection {
-    background: #aa8546;
-    color: #100d09;
-  }
-
-  button,
-  input {
-    font-family: "Segoe UI", Arial, sans-serif;
-  }
-
-  button:focus-visible,
-  input:focus-visible {
-    outline: 2px solid #e2c288;
-    outline-offset: 5px;
-  }
-
-  /* Dark depth behind the architecture */
-  #viewport {
-    perspective: 920px;
-    background:
-      radial-gradient(
-        ellipse at 50% 42%,
-        #342819 0%,
-        #17120d 42%,
-        #080706 85%
-      );
-  }
-
-  /* Cinematic edge shading */
-  #viewport::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, .37),
-        transparent 25%,
-        transparent 72%,
-        rgba(0, 0, 0, .4)
-      ),
-      radial-gradient(
-        ellipse at center,
-        transparent 35%,
-        rgba(0, 0, 0, .48) 100%
-      );
-  }
-
-  /* Walnut walls with recessed panel detailing */
-  .wall {
-    border-top: 11px solid #514027;
-    border-bottom: 24px solid #17110b;
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, .4),
-        transparent 20%,
-        transparent 67%,
-        rgba(0, 0, 0, .38)
-      ),
-      repeating-linear-gradient(
-        90deg,
-        transparent 0 237px,
-        #100d09 237px 241px,
-        #5c4528 241px 243px,
-        #20180f 243px 249px,
-        transparent 249px 250px
-      ),
-      repeating-linear-gradient(
-        0deg,
-        transparent 0 100px,
-        rgba(198, 162, 100, .12) 100px 102px,
-        rgba(0, 0, 0, .35) 102px 106px,
-        transparent 106px 240px
-      ),
-      repeating-linear-gradient(
-        91deg,
-        #302217 0,
-        #35271a 5px,
-        #291e14 10px,
-        #3b2a1b 13px,
-        #2c2016 18px
-      );
-    box-shadow:
-      inset 0 15px 22px rgba(0, 0, 0, .45),
-      inset 0 -18px 22px rgba(0, 0, 0, .5);
-  }
-
-  /* Aged wooden floorboards */
-  .floor {
-    background:
-      linear-gradient(
-        90deg,
-        rgba(0, 0, 0, .55),
-        transparent 23%,
-        transparent 77%,
-        rgba(0, 0, 0, .55)
-      ),
-      repeating-linear-gradient(
-        0deg,
-        transparent 0 176px,
-        rgba(0, 0, 0, .6) 176px 180px,
-        rgba(174, 132, 73, .2) 180px 182px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        #3d2a19 0 82px,
-        #17110b 82px 85px,
-        #4b331e 85px 168px,
-        #1b140c 168px 171px,
-        #352416 171px 255px,
-        #17110b 255px 258px
-      );
-  }
-
-  /* Dark plaster ceiling */
-  .ceiling {
-    background:
-      repeating-linear-gradient(
-        90deg,
-        #19150f 0,
-        #211a12 4px,
-        #18140e 9px,
-        #1c1710 15px
-      );
-    border: 10px solid #49351e;
-    box-shadow: inset 0 0 100px #000b;
-  }
-
-  /* New architectural elements */
-  .rustic-beam {
-    background:
-      repeating-linear-gradient(
-        0deg,
-        #24190f 0,
-        #352416 4px,
-        #1a130c 8px,
-        #302113 12px
-      );
-    border: 2px solid #594024;
-    box-shadow:
-      inset 0 3px 1px #98703a33,
-      0 5px 12px #0008;
-  }
-
-  .rustic-pilaster {
-    background:
-      linear-gradient(
-        90deg,
-        #17100a,
-        #554024 18%,
-        #332314 40%,
-        #48321c 68%,
-        #120d08
-      );
-    border: 1px solid #6d512d;
-    box-shadow: 0 0 15px #0006;
-  }
-
-  .rustic-runner {
-    background:
-      linear-gradient(
-        90deg,
-        #21100d 0 3%,
-        #99713d 3% 4%,
-        #32130f 4% 8%,
-        #735029 8% 9%,
-        transparent 9% 91%,
-        #735029 91% 92%,
-        #32130f 92% 96%,
-        #99713d 96% 97%,
-        #21100d 97%
-      ),
-      repeating-linear-gradient(
-        45deg,
-        rgba(188, 139, 67, .12) 0 2px,
-        transparent 2px 25px,
-        rgba(188, 139, 67, .07) 25px 27px,
-        transparent 27px 50px
-      ),
-      repeating-linear-gradient(
-        -45deg,
-        transparent 0 25px,
-        rgba(188, 139, 67, .1) 25px 27px,
-        transparent 27px 50px
-      ),
-      #431b16;
-    border: 2px solid #8a6538;
-    box-shadow: 0 0 22px #0008;
-  }
-
-  /* Antique brass picture frames */
-  .frame {
-    padding: 14px;
-    border: 3px solid #b89557;
-    border-radius: 0;
-    background:
-      repeating-linear-gradient(
-        135deg,
-        transparent 0 4px,
-        rgba(0, 0, 0, .13) 4px 6px
-      ),
-      linear-gradient(
-        135deg,
-        #d0af6b 0%,
-        #715022 12%,
-        #bc9752 25%,
-        #594019 42%,
-        #c5a268 60%,
-        #80602f 80%,
-        #d6b87a 100%
-      );
-    box-shadow:
-      inset 0 0 0 2px #33230d,
-      inset 0 0 0 5px #b08c48,
-      inset 0 0 0 7px #513713,
-      0 14px 22px rgba(0, 0, 0, .65);
-  }
-
-  .frame-inner {
-    border: 3px solid #17120b;
-    background: #100e0b;
-    box-shadow: 0 0 0 1px #b9985c;
-  }
-
-  .frame video {
-    background: #080706;
-  }
-
-  .exhibit.active .frame,
-  .exhibit:focus-visible .frame {
-    box-shadow:
-      inset 0 0 0 2px #33230d,
-      inset 0 0 0 5px #c3a064,
-      inset 0 0 0 7px #513713,
-      0 0 35px rgba(210, 161, 76, .16),
-      0 14px 25px rgba(0, 0, 0, .7);
-  }
-
-  .placeholder {
-    background:
-      radial-gradient(
-        ellipse at 50% 25%,
-        rgba(166, 120, 53, .18),
-        transparent 70%
-      ),
-      repeating-linear-gradient(
-        0deg,
-        #17130e 0,
-        #1b160f 2px,
-        #17130e 4px
-      );
-    color: #ddc797;
-  }
-
-  .placeholder span {
-    font-size: 29px;
-  }
-
-  .placeholder small {
-    color: #9f8c6b;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 11px;
-  }
-
-  /* Engraved-style metal plaques */
-  .plaque {
-    width: 290px;
-    margin-top: 18px;
-    padding: 12px 14px;
-    border: 1px solid #9f7b40;
-    background:
-      linear-gradient(
-        110deg,
-        #8f6d36,
-        #c5a66a 42%,
-        #ae8a4b 65%,
-        #89632e
-      );
-    color: #251a0c;
-    box-shadow:
-      inset 0 0 0 3px #b9965955,
-      0 5px 12px #0007;
-  }
-
-  .plaque h3 {
-    font-size: 20px;
-    text-shadow: 0 1px #e9d3a044;
-  }
-
-  .plaque p {
-    color: #3e2b13;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 10px;
-    letter-spacing: .04em;
-  }
-
-  .exhibit-number {
-    top: -43px;
-    color: #b99a64;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 10px;
-    letter-spacing: .34em;
-  }
-
-  /* Warm brass picture lamps */
-  .wall-light {
-    height: 9px;
-    border: 1px solid #765324;
-    border-radius: 2px;
-    background:
-      linear-gradient(
-        #b08b48,
-        #d3b375 45%,
-        #73501e 55%,
-        #d9b56f
-      );
-    box-shadow:
-      0 7px 11px rgba(255, 205, 115, .65),
-      0 28px 45px 12px rgba(255, 197, 97, .16),
-      0 66px 90px 33px rgba(255, 192, 89, .11);
-  }
-
-  .end-wall {
-    border: 12px solid #684d29;
-    background:
-      radial-gradient(
-        ellipse at center,
-        rgba(141, 102, 43, .22),
-        transparent 67%
-      ),
-      repeating-linear-gradient(
-        90deg,
-        #251b11 0 80px,
-        #1c140d 80px 84px
-      );
-    box-shadow: inset 0 0 0 4px #aa854655;
-  }
-
-  .end-wall h2 {
-    color: #d9bc82;
-    font-size: 46px;
-    text-shadow: 0 3px 15px #000;
-  }
-
-  .end-wall p {
-    color: #ad9670;
-    letter-spacing: .12em;
-    font-size: 16px;
-  }
-
-  /* Minimal museum-style interface */
-  .topbar {
-    padding: 24px 30px 45px;
-    background:
-      linear-gradient(
-        rgba(7, 6, 5, .95),
-        rgba(7, 6, 5, .45) 60%,
-        transparent
-      );
-  }
-
-  .brand {
-    color: #dbc18e;
-    font-size: clamp(21px, 4vw, 29px);
-    font-style: normal;
-    letter-spacing: .035em;
-  }
-
-  .brand small {
-    margin-top: 9px;
-    color: #8f7c5d;
-    letter-spacing: .25em;
-  }
-
-  .ui-button {
-    padding: 10px 16px;
-    border: 1px solid #866a3c;
-    border-radius: 3px;
-    background: rgba(19, 15, 10, .93);
-    color: #d3bc8f;
-    font-size: 11px;
-    letter-spacing: .06em;
-    backdrop-filter: blur(12px);
-    transition: background .2s, border-color .2s;
-  }
-
-  .ui-button:hover {
-    background: #3e2e18;
-    border-color: #d5ae68;
-  }
-
-  .ui-button.primary {
-    background:
-      linear-gradient(135deg, #d4b477, #a98140);
-    color: #20170b;
-    border-color: #d2b37a;
-  }
-
-  .ui-button.primary:hover {
-    background:
-      linear-gradient(135deg, #e4c68d, #bc9653);
-  }
-
-  .hint {
-    top: 105px;
-    padding: 7px 14px;
-    border: 1px solid #8a6c3433;
-    border-radius: 2px;
-    background: #110e0ac9;
-    color: #ab9470;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 10px;
-    letter-spacing: .03em;
-  }
-
-  .memory-info {
-    left: 28px;
-    bottom: 107px;
-    max-width: 310px;
-    padding: 17px 20px;
-    border: 0;
-    border-left: 2px solid #b18c4d;
-    border-radius: 0;
-    background:
-      linear-gradient(
-        90deg,
-        rgba(12, 10, 7, .94),
-        rgba(12, 10, 7, .68)
-      );
-    backdrop-filter: blur(10px);
-  }
-
-  .eyebrow {
-    color: #b79a64;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 9px;
-    letter-spacing: .23em;
-  }
-
-  .memory-info h2 {
-    color: #e2cda6;
-    font-size: 25px;
-    font-weight: normal;
-  }
-
-  .memory-info p {
-    color: #b5a386;
-    font-size: 12px;
-    line-height: 1.8;
-  }
-
-  .bottom-bar {
-    gap: 9px;
-    padding: 9px;
-    border: 1px solid #71562e;
-    border-radius: 4px;
-    background: rgba(12, 10, 7, .94);
-    box-shadow: 0 8px 30px #0007;
-  }
-
-  .progress {
-    color: #b99f71;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 11px;
-    letter-spacing: .1em;
-  }
-
-  .walk-controls button {
-    border: 1px solid #7d6238;
-    border-radius: 3px;
-    background: rgba(19, 15, 10, .94);
-    color: #dbc18e;
-  }
-
-  .walk-controls button:active {
-    background: #71532a;
-  }
-
-  /* Entrance and cinema */
-  .overlay {
-    background:
-      radial-gradient(
-        ellipse at 50% 30%,
-        rgba(70, 49, 23, .3),
-        transparent 70%
-      ),
-      rgba(7, 6, 5, .95);
-  }
-
-  .welcome-card {
-    position: relative;
-    padding: clamp(32px, 6vw, 60px);
-    border: 1px solid #9a7942;
-    border-radius: 4px;
-    background:
-      radial-gradient(
-        ellipse at 50% 0,
-        rgba(151, 109, 45, .14),
-        transparent 75%
-      ),
-      #15110c;
-    box-shadow:
-      inset 0 0 0 7px #15110c,
-      inset 0 0 0 8px #7f623233,
-      0 35px 100px #0009;
-  }
-
-  .welcome-card h1 {
-    color: #e8d9ba;
-    font-weight: normal;
-    letter-spacing: -.025em;
-  }
-
-  .welcome-card h1 em {
-    color: #c8a86a;
-  }
-
-  .welcome-card p {
-    color: #ac9b7d;
-  }
-
-  .welcome-card .small {
-    color: #807057;
-    font-family: "Segoe UI", Arial, sans-serif;
-  }
-
-  .upload-note {
-    border-color: #806437;
-    border-radius: 3px;
-    color: #b4a183;
-    font-family: "Segoe UI", Arial, sans-serif;
-  }
-
-  #file-input {
-    color: #c9b48c;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 12px;
-  }
-
-  #file-input::file-selector-button {
-    margin-right: 12px;
-    padding: 9px 13px;
-    border: 1px solid #967442;
-    background: #352715;
-    color: #dfc99f;
-    cursor: pointer;
-  }
-
-  #file-status {
-    color: #c8aa70;
-  }
-
-  .cinema-card {
-    padding: 18px;
-    border: 1px solid #a27e43;
-    border-radius: 4px;
-    background: #15110c;
-    box-shadow:
-      inset 0 0 0 5px #8f6d2c1c,
-      0 30px 90px #0009;
-  }
-
-  .cinema-card video {
-    border: 1px solid #594322;
-    border-radius: 0;
-    background: #050403;
-  }
-
-  .cinema-details {
-    padding: 20px 5px 6px;
-  }
-
-  .cinema-details h2 {
-    color: #dfc89e;
-  }
-
-  .cinema-details p {
-    color: #ad9b7c;
-  }
-
-  @media (max-width: 650px) {
-    #viewport {
-      perspective: 620px;
-    }
-
-    .topbar {
-      padding: 18px 14px 35px;
-    }
-
-    .brand {
-      font-size: 21px;
-    }
-
-    .brand small {
-      font-size: 7px;
-      letter-spacing: .16em;
-    }
-
-    .top-actions {
-      gap: 6px;
-    }
-
-    .top-actions .ui-button {
-      padding: 8px 9px;
-      font-size: 10px;
-    }
-
-    .hint {
-      top: 88px;
-      font-size: 9px;
-    }
-
-    .memory-info {
-      left: 12px;
-      right: 165px;
-      bottom: 107px;
-      padding: 12px;
-    }
-
-    .memory-info h2 {
-      font-size: 19px;
-    }
-
-    .memory-info p {
-      font-size: 10px;
-    }
-
-    .bottom-bar {
-      gap: 6px;
-      padding: 8px;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ui-button {
-      transition: none;
-    }
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta name="theme-color" content="#100d09">
+
+  <meta
+    name="description"
+    content="A private museum of our favourite memories."
+  >
+
+  <title>The Museum of Us</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <!-- Three-dimensional room -->
+  <main
+    id="viewport"
+    aria-label="Interactive three-dimensional memory museum"
+  >
+    <div id="camera"></div>
+  </main>
+
+  <!-- Top interface -->
+  <header class="topbar">
+    <div class="brand">
+      The Museum of Us
+      <span>A private collection of our favourite days</span>
+    </div>
+
+    <div class="top-actions">
+      <button class="button" id="upload-button" type="button">
+        Add videos
+      </button>
+
+      <button
+        class="button"
+        id="sound-button"
+        type="button"
+        aria-pressed="false"
+      >
+        Sound off
+      </button>
+    </div>
+  </header>
+
+  <div class="instruction-strip">
+    W/S: walk · A/D: sidestep · ←/→: turn · click a frame to watch
+  </div>
+
+  <!-- Current exhibit -->
+  <aside class="memory-info">
+    <span class="eyebrow" id="info-label">
+      Welcome, ButterCup
+    </span>
+
+    <h2 id="info-title">
+      Some moments deserve a museum.
+    </h2>
+
+    <p id="info-caption">
+      Walk closer to a frame, or choose Next to begin.
+    </p>
+  </aside>
+
+  <!-- Touch movement controls -->
+  <nav class="movement-pad" aria-label="Movement controls">
+    <button
+      class="move-forward"
+      data-control="forward"
+      type="button"
+      aria-label="Walk forward"
+    >↑</button>
+
+    <button
+      class="move-left"
+      data-control="left"
+      type="button"
+      aria-label="Turn left"
+    >↶</button>
+
+    <button
+      class="move-back"
+      data-control="back"
+      type="button"
+      aria-label="Walk backward"
+    >↓</button>
+
+    <button
+      class="move-right"
+      data-control="right"
+      type="button"
+      aria-label="Turn right"
+    >↷</button>
+  </nav>
+
+  <!-- Guided tour controls -->
+  <nav class="tour-controls" aria-label="Exhibit navigation">
+    <button
+      class="button"
+      id="previous-button"
+      type="button"
+      aria-label="Previous memory"
+    >
+      ← Previous
+    </button>
+
+    <span class="progress" id="progress">0 / 6</span>
+
+    <button
+      class="button button-gold"
+      id="next-button"
+      type="button"
+    >
+      Next →
+    </button>
+
+    <button class="button" id="watch-button" type="button">
+      Watch
+    </button>
+  </nav>
+
+  <!-- Entrance -->
+  <section class="overlay" id="welcome">
+    <div
+      class="entrance-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="welcome-title"
+    >
+      <div class="ornament" aria-hidden="true">✦</div>
+
+      <span class="eyebrow">
+        A private collection · for ButterCup
+      </span>
+
+      <h1 id="welcome-title">
+        The Museum<br>
+        of <em>Us.</em>
+      </h1>
+
+      <div class="gold-divider" aria-hidden="true"></div>
+
+      <p>
+        An intimate collection of our favourite moments.<br>
+        Walk slowly. Stay a little longer.<br>
+        Some memories are worth visiting again.
+      </p>
+
+      <div class="entrance-actions">
+        <button
+          class="button button-gold"
+          id="enter-button"
+          type="button"
+        >
+          Enter the collection →
+        </button>
+
+        <button
+          class="button"
+          id="welcome-upload"
+          type="button"
+        >
+          Choose our videos
+        </button>
+      </div>
+
+      <p class="small-print">
+        Explore with your keyboard or the on-screen arrows.<br>
+        Nearby videos play quietly inside their frames.
+      </p>
+    </div>
+  </section>
+
+  <!-- Select local video files -->
+  <section class="overlay" id="upload-overlay" hidden>
+    <div
+      class="entrance-card upload-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="upload-title"
+    >
+      <span class="eyebrow">Curate the collection</span>
+
+      <h2 id="upload-title">
+        Add our <em>memories.</em>
+      </h2>
+
+      <p>
+        Choose up to six videos. Files are placed in filename order.
+      </p>
+
+      <div class="upload-note">
+        Selected files stay on this device. They are not uploaded,
+        and selections are cleared when you refresh the page.
+        To share a permanent gallery, set the video paths in
+        <code>script.js</code>.
+      </div>
+
+      <label class="file-label" for="file-input">
+        Select video files
+      </label>
+
+      <input
+        id="file-input"
+        type="file"
+        accept="video/*"
+        multiple
+      >
+
+      <p id="file-status" role="status"></p>
+
+      <button
+        class="button button-gold"
+        id="close-upload"
+        type="button"
+      >
+        Return to the museum
+      </button>
+    </div>
+  </section>
+
+  <!-- Expanded video -->
+  <section class="overlay cinema-overlay" id="cinema" hidden>
+    <div
+      class="cinema-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cinema-title"
+    >
+      <div class="cinema-toolbar">
+        <span class="eyebrow">A moment worth keeping</span>
+
+        <button
+          class="button"
+          id="close-cinema"
+          type="button"
+        >
+          Close ✕
+        </button>
+      </div>
+
+      <video
+        id="cinema-video"
+        controls
+        playsinline
+        preload="metadata"
+        tabindex="0"
+      ></video>
+
+      <div class="cinema-details">
+        <span class="eyebrow" id="cinema-date"></span>
+        <h2 id="cinema-title"></h2>
+        <p id="cinema-caption"></p>
+      </div>
+    </div>
+  </section>
+
+  <noscript>
+    <div class="noscript-message">
+      Please enable JavaScript to explore the museum.
+    </div>
+  </noscript>
+</body>
+</html>

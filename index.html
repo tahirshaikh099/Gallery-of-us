@@ -8,43 +8,36 @@
     content="width=device-width, initial-scale=1"
   >
 
-  <meta name="theme-color" content="#100d09">
-
-  <meta
-    name="description"
-    content="A private museum of our favourite memories."
-  >
+  <meta name="theme-color" content="#151310">
 
   <title>The Museum of Us</title>
 
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="./style.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 
 <body>
-  <!-- Three-dimensional room -->
-  <main
-    id="viewport"
-    aria-label="Interactive three-dimensional memory museum"
-  >
-    <div id="camera"></div>
-  </main>
+  <canvas id="museum"></canvas>
 
-  <!-- Top interface -->
-  <header class="topbar">
+  <header class="header">
     <div class="brand">
       The Museum of Us
-      <span>A private collection of our favourite days</span>
+      <span>A private collection, for ButterCup</span>
     </div>
 
-    <div class="top-actions">
-      <button class="button" id="upload-button" type="button">
-        Add videos
-      </button>
+    <div class="header-actions">
+      <button id="add-videos" type="button">Add videos</button>
 
       <button
-        class="button"
-        id="sound-button"
+        id="sound"
         type="button"
         aria-pressed="false"
       >
@@ -53,222 +46,144 @@
     </div>
   </header>
 
-  <div class="instruction-strip">
-    W/S: walk · A/D: sidestep · ←/→: turn · click a frame to watch
+  <div class="instructions">
+    Drag to look · W A S D to walk · click a frame to watch
   </div>
 
-  <!-- Current exhibit -->
-  <aside class="memory-info">
-    <span class="eyebrow" id="info-label">
-      Welcome, ButterCup
+  <aside class="memory-card">
+    <span class="eyebrow" id="memory-number">
+      THE PERMANENT COLLECTION
     </span>
 
-    <h2 id="info-title">
+    <h2 id="memory-title">
       Some moments deserve a museum.
     </h2>
 
-    <p id="info-caption">
-      Walk closer to a frame, or choose Next to begin.
+    <p id="memory-caption">
+      A little place to keep our favourite days.
     </p>
   </aside>
 
-  <!-- Touch movement controls -->
-  <nav class="movement-pad" aria-label="Movement controls">
-    <button
-      class="move-forward"
-      data-control="forward"
-      type="button"
-      aria-label="Walk forward"
-    >↑</button>
+  <nav class="tour" aria-label="Memory tour">
+    <button id="previous" type="button">← Previous</button>
 
-    <button
-      class="move-left"
-      data-control="left"
-      type="button"
-      aria-label="Turn left"
-    >↶</button>
+    <span id="counter">0 / 7</span>
 
-    <button
-      class="move-back"
-      data-control="back"
-      type="button"
-      aria-label="Walk backward"
-    >↓</button>
+    <button id="next" class="gold" type="button">Next →</button>
 
-    <button
-      class="move-right"
-      data-control="right"
-      type="button"
-      aria-label="Turn right"
-    >↷</button>
+    <button id="overview" type="button">Room view</button>
+
+    <button id="watch" type="button">Watch</button>
   </nav>
 
-  <!-- Guided tour controls -->
-  <nav class="tour-controls" aria-label="Exhibit navigation">
-    <button
-      class="button"
-      id="previous-button"
-      type="button"
-      aria-label="Previous memory"
-    >
-      ← Previous
-    </button>
+  <div class="movement" aria-label="Movement controls">
+    <button data-move="forward" class="up" aria-label="Forward">↑</button>
+    <button data-move="left" class="left" aria-label="Move left">←</button>
+    <button data-move="back" class="down" aria-label="Backward">↓</button>
+    <button data-move="right" class="right" aria-label="Move right">→</button>
+  </div>
 
-    <span class="progress" id="progress">0 / 6</span>
-
-    <button
-      class="button button-gold"
-      id="next-button"
-      type="button"
-    >
-      Next →
-    </button>
-
-    <button class="button" id="watch-button" type="button">
-      Watch
-    </button>
-  </nav>
-
-  <!-- Entrance -->
   <section class="overlay" id="welcome">
     <div
-      class="entrance-card"
+      class="welcome-card"
       role="dialog"
       aria-modal="true"
       aria-labelledby="welcome-title"
     >
-      <div class="ornament" aria-hidden="true">✦</div>
+      <span class="ornament" aria-hidden="true">✦</span>
 
-      <span class="eyebrow">
-        A private collection · for ButterCup
-      </span>
+      <span class="eyebrow">An exhibition of our little forever</span>
 
       <h1 id="welcome-title">
-        The Museum<br>
-        of <em>Us.</em>
+        The Museum<br>of <em>Us.</em>
       </h1>
 
-      <div class="gold-divider" aria-hidden="true"></div>
+      <div class="divider"></div>
 
       <p>
-        An intimate collection of our favourite moments.<br>
-        Walk slowly. Stay a little longer.<br>
-        Some memories are worth visiting again.
+        I wanted somewhere to keep the days<br>
+        I never want to forget.<br>
+        So I built a little museum for ours.
       </p>
 
-      <div class="entrance-actions">
-        <button
-          class="button button-gold"
-          id="enter-button"
-          type="button"
-        >
-          Enter the collection →
-        </button>
+      <button id="enter" class="gold" type="button" disabled>
+        Preparing the gallery…
+      </button>
 
-        <button
-          class="button"
-          id="welcome-upload"
-          type="button"
-        >
-          Choose our videos
-        </button>
-      </div>
-
-      <p class="small-print">
-        Explore with your keyboard or the on-screen arrows.<br>
-        Nearby videos play quietly inside their frames.
+      <p class="small" id="load-status" role="status">
+        Building our little world.
       </p>
     </div>
   </section>
 
-  <!-- Select local video files -->
-  <section class="overlay" id="upload-overlay" hidden>
+  <section class="overlay" id="upload" hidden>
     <div
-      class="entrance-card upload-card"
+      class="welcome-card"
       role="dialog"
       aria-modal="true"
       aria-labelledby="upload-title"
     >
       <span class="eyebrow">Curate the collection</span>
 
-      <h2 id="upload-title">
-        Add our <em>memories.</em>
-      </h2>
+      <h2 id="upload-title">Add our memories.</h2>
 
       <p>
-        Choose up to six videos. Files are placed in filename order.
+        Select up to seven videos. They are assigned
+        to the frames in filename order.
       </p>
 
-      <div class="upload-note">
-        Selected files stay on this device. They are not uploaded,
-        and selections are cleared when you refresh the page.
-        To share a permanent gallery, set the video paths in
-        <code>script.js</code>.
-      </div>
-
-      <label class="file-label" for="file-input">
-        Select video files
-      </label>
-
       <input
-        id="file-input"
+        id="files"
         type="file"
         accept="video/*"
         multiple
+        aria-label="Choose memory videos"
       >
 
-      <p id="file-status" role="status"></p>
+      <p class="small">
+        Local selections are not uploaded or saved.
+        For a permanent shared website, use the file
+        paths in main.js.
+      </p>
 
-      <button
-        class="button button-gold"
-        id="close-upload"
-        type="button"
-      >
-        Return to the museum
+      <p id="upload-status" role="status"></p>
+
+      <button id="close-upload" class="gold" type="button">
+        Return to the collection
       </button>
     </div>
   </section>
 
-  <!-- Expanded video -->
-  <section class="overlay cinema-overlay" id="cinema" hidden>
+  <section class="overlay" id="cinema" hidden>
     <div
       class="cinema-card"
       role="dialog"
       aria-modal="true"
       aria-labelledby="cinema-title"
     >
-      <div class="cinema-toolbar">
+      <div class="cinema-top">
         <span class="eyebrow">A moment worth keeping</span>
-
-        <button
-          class="button"
-          id="close-cinema"
-          type="button"
-        >
-          Close ✕
-        </button>
+        <button id="close-cinema" type="button">Close ✕</button>
       </div>
 
       <video
         id="cinema-video"
         controls
         playsinline
-        preload="metadata"
         tabindex="0"
       ></video>
 
-      <div class="cinema-details">
-        <span class="eyebrow" id="cinema-date"></span>
-        <h2 id="cinema-title"></h2>
-        <p id="cinema-caption"></p>
-      </div>
+      <h2 id="cinema-title"></h2>
+      <p id="cinema-caption"></p>
     </div>
   </section>
 
   <noscript>
-    <div class="noscript-message">
-      Please enable JavaScript to explore the museum.
+    <div class="overlay">
+      Please enable JavaScript to visit the museum.
     </div>
   </noscript>
+
+  <script type="module" src="./main.js"></script>
 </body>
 </html>

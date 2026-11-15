@@ -4,508 +4,564 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Museum of Our Memories</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --bg: #0d0b09;
-      --wall: #161310;
-      --cream: #f3e8d8;
-      --gold: #c9a227;
-      --muted: #a99f90;
-      --frame: #2a241d;
-    }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    html,
     body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--cream);
-      font-family: "Inter", sans-serif;
       overflow: hidden;
+      background: #070605;
+      color: #f3e8d8;
+      font-family: "Inter", "Segoe UI", sans-serif;
     }
 
-    /* Entry screen */
-    #intro {
+    canvas {
+      display: block;
+    }
+
+    #overlay {
       position: fixed;
       inset: 0;
-      z-index: 50;
+      z-index: 20;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       background:
-        radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.18), transparent 55%),
-        var(--bg);
-      transition: opacity 1s ease, visibility 1s ease;
+        radial-gradient(circle at 50% 40%, rgba(201, 162, 39, 0.16), transparent 55%),
+        rgba(7, 6, 5, 0.94);
+      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
 
-    #intro.hidden {
+    #overlay.hidden {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
     }
 
-    .intro-kicker {
-      font-size: 0.8rem;
+    .kicker {
+      font-size: 0.75rem;
       letter-spacing: 0.35em;
       text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 22px;
+      color: #c9a227;
+      margin-bottom: 20px;
     }
 
-    .intro-title {
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(3rem, 10vw, 7.5rem);
-      line-height: 0.95;
+    h1 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.8rem, 9vw, 6.5rem);
       font-weight: 600;
+      line-height: 1;
     }
 
-    .intro-sub {
-      max-width: 520px;
-      margin-top: 26px;
-      color: var(--muted);
+    .subtitle {
+      max-width: 540px;
+      margin-top: 22px;
+      color: #a99f90;
       font-weight: 300;
       line-height: 1.7;
     }
 
-    .enter-btn {
-      margin-top: 42px;
-      padding: 15px 36px;
-      border: 1px solid rgba(201, 162, 39, 0.55);
+    .start {
+      margin-top: 40px;
+      padding: 16px 38px;
+      border: 1px solid rgba(201, 162, 39, 0.6);
       background: transparent;
-      color: var(--cream);
-      font-size: 0.82rem;
+      color: #f3e8d8;
+      font-size: 0.8rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: all 0.35s ease;
+      transition: 0.3s ease;
     }
 
-    .enter-btn:hover {
-      background: var(--gold);
+    .start:hover {
+      background: #c9a227;
       color: #14100a;
-      border-color: var(--gold);
     }
 
-    /* Museum corridor */
-    #museum {
-      height: 100vh;
-      width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      background:
-        linear-gradient(180deg, #080706 0%, #161310 45%, #0b0908 100%);
-    }
-
-    #museum::-webkit-scrollbar {
-      display: none;
-    }
-
-    .corridor {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      width: max-content;
-      padding: 0 8vw;
-      gap: 7vw;
-    }
-
-    .room {
-      scroll-snap-align: center;
-      width: min(86vw, 1000px);
-      flex-shrink: 0;
-      position: relative;
-      opacity: 0.35;
-      transform: scale(0.94);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-
-    .room.active {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .exhibit {
-      position: relative;
-      border: 1px solid rgba(201, 162, 39, 0.28);
-      background: var(--frame);
-      padding: 18px;
-      box-shadow:
-        0 40px 90px rgba(0, 0, 0, 0.65),
-        0 0 80px rgba(201, 162, 39, 0.08);
-    }
-
-    .video-wrap {
-      position: relative;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      background: #000;
-    }
-
-    video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: saturate(0.92) contrast(1.03);
-    }
-
-    .video-wrap::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.18),
-        transparent 40%,
-        rgba(0, 0, 0, 0.35)
-      );
-    }
-
-    .play-hint {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      background: rgba(0, 0, 0, 0.35);
-      color: var(--cream);
-      font-size: 0.8rem;
-      letter-spacing: 0.25em;
+    .controls {
+      margin-top: 28px;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      color: rgba(243, 232, 216, 0.45);
       text-transform: uppercase;
-      cursor: pointer;
-      transition: opacity 0.4s ease;
     }
 
-    .video-wrap.playing .play-hint {
+    #memoryCard {
+      position: fixed;
+      left: 50%;
+      bottom: 42px;
+      transform: translateX(-50%);
+      z-index: 15;
+      max-width: min(620px, 90vw);
+      padding: 20px 26px;
+      border: 1px solid rgba(201, 162, 39, 0.35);
+      background: rgba(10, 8, 6, 0.78);
+      backdrop-filter: blur(12px);
       opacity: 0;
-      pointer-events: none;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
 
-    .label {
-      margin-top: 20px;
-      padding: 18px 4px 2px;
-      border-top: 1px solid rgba(201, 162, 39, 0.22);
+    #memoryCard.visible {
+      opacity: 1;
+      visibility: visible;
     }
 
-    .memory-date {
-      font-size: 0.72rem;
+    #memoryDate {
+      font-size: 0.68rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: #c9a227;
     }
 
-    .memory-title {
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(1.7rem, 4vw, 2.6rem);
+    #memoryTitle {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.7rem;
+      margin-top: 8px;
+    }
+
+    #memoryText {
       margin-top: 10px;
-      line-height: 1.1;
-    }
-
-    .memory-text {
-      margin-top: 12px;
-      max-width: 640px;
-      color: var(--muted);
+      color: #a99f90;
+      font-size: 0.92rem;
+      line-height: 1.6;
       font-weight: 300;
-      line-height: 1.7;
     }
 
-    /* Final room */
-    .final {
-      text-align: center;
-    }
-
-    .final .memory-title {
-      font-size: clamp(2.4rem, 7vw, 5rem);
-    }
-
-    .final-text {
-      max-width: 620px;
-      margin: 22px auto 0;
-      color: var(--muted);
-      font-weight: 300;
-      line-height: 1.8;
-    }
-
-    /* Navigation */
-    .nav {
+    #crosshair {
       position: fixed;
-      bottom: 26px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      z-index: 30;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .nav-btn {
-      width: 46px;
-      height: 46px;
+      width: 5px;
+      height: 5px;
+      margin: -2.5px 0 0 -2.5px;
       border-radius: 50%;
-      border: 1px solid rgba(243, 232, 216, 0.25);
-      background: rgba(13, 11, 9, 0.7);
-      color: var(--cream);
-      font-size: 1rem;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: all 0.3s ease;
+      background: rgba(243, 232, 216, 0.7);
+      z-index: 10;
+      pointer-events: none;
     }
 
-    .nav-btn:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    .progress {
-      font-size: 0.72rem;
-      letter-spacing: 0.25em;
-      color: var(--muted);
-    }
-
-    .hint {
+    #loading {
       position: fixed;
-      bottom: 88px;
-      left: 50%;
-      transform: translateX(-50%);
+      inset: 0;
       z-index: 30;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
+      display: none;
+      place-items: center;
+      background: #070605;
+      color: #c9a227;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: rgba(243, 232, 216, 0.45);
-      animation: pulse 2.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.35; }
-      50% { opacity: 0.9; }
-    }
-
-    @media (max-width: 640px) {
-      .corridor {
-        gap: 10vw;
-        padding: 0 6vw;
-      }
-
-      .room {
-        width: 88vw;
-      }
-
-      .exhibit {
-        padding: 10px;
-      }
     }
   </style>
 </head>
 
 <body>
 
-  <section id="intro">
-    <p class="intro-kicker">A private exhibition</p>
-    <h1 class="intro-title">Museum of<br>Our Memories</h1>
-    <p class="intro-sub">
-      A quiet corridor of moments we do not want to forget.
-      Walk past each frame, and let the memory play.
+  <div id="loading">Preparing the museum…</div>
+
+  <div id="overlay">
+    <p class="kicker">A private exhibition</p>
+    <h1>Museum of<br>Our Memories</h1>
+    <p class="subtitle">
+      Walk slowly through the gallery.
+      When you stand before a memory, it will begin to play.
     </p>
-    <button class="enter-btn" id="enterBtn">Enter the museum</button>
-  </section>
-
-  <main id="museum">
-    <div class="corridor" id="corridor">
-
-      <!-- MEMORY 1 -->
-      <section class="room" data-index="0">
-        <div class="exhibit">
-          <div class="video-wrap">
-            <video src="videos/memory1.mp4" muted loop playsinline preload="metadata"></video>
-            <div class="play-hint">Tap to begin</div>
-          </div>
-          <div class="label">
-            <p class="memory-date">Room 01 — The Beginning</p>
-            <h2 class="memory-title">The Day Everything Started</h2>
-            <p class="memory-text">
-              Write your short memory here: where you were, what happened,
-              and why this moment still feels important.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- MEMORY 2 -->
-      <section class="room" data-index="1">
-        <div class="exhibit">
-          <div class="video-wrap">
-            <video src="videos/memory2.mp4" muted loop playsinline preload="metadata"></video>
-            <div class="play-hint">Tap to begin</div>
-          </div>
-          <div class="label">
-            <p class="memory-date">Room 02 — A Small Adventure</p>
-            <h2 class="memory-title">The Trip We Still Talk About</h2>
-            <p class="memory-text">
-              Add the story behind this video—the place, the weather,
-              the joke, the food, or the moment you want to preserve.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- MEMORY 3 -->
-      <section class="room" data-index="2">
-        <div class="exhibit">
-          <div class="video-wrap">
-            <video src="videos/memory3.mp4" muted loop playsinline preload="metadata"></video>
-            <div class="play-hint">Tap to begin</div>
-          </div>
-          <div class="label">
-            <p class="memory-date">Room 03 — Ordinary Magic</p>
-            <h2 class="memory-title">An Ordinary Day That Felt Special</h2>
-            <p class="memory-text">
-              Sometimes the best memories are not grand ones.
-              They are the quiet moments that suddenly mean everything.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- FINAL ROOM -->
-      <section class="room final" data-index="3">
-        <p class="memory-date">Final Room</p>
-        <h2 class="memory-title">To Be Continued</h2>
-        <p class="final-text">
-          This museum is not finished yet.
-          There are still more places to go, more videos to make,
-          and more memories waiting to be framed.
-        </p>
-      </section>
-
-    </div>
-  </main>
-
-  <p class="hint" id="hint">Scroll or swipe to walk</p>
-
-  <div class="nav">
-    <button class="nav-btn" id="prevBtn" aria-label="Previous memory">←</button>
-    <span class="progress" id="progress">01 / 04</span>
-    <button class="nav-btn" id="nextBtn" aria-label="Next memory">→</button>
+    <button class="start" id="startButton">Enter the museum</button>
+    <p class="controls">W A S D — Walk &nbsp;•&nbsp; Mouse — Look &nbsp;•&nbsp; Esc — Pause</p>
   </div>
 
-  <script>
-    const museum = document.getElementById("museum");
-    const rooms = Array.from(document.querySelectorAll(".room"));
-    const videos = Array.from(document.querySelectorAll("video"));
-    const progress = document.getElementById("progress");
-    const hint = document.getElementById("hint");
-    const intro = document.getElementById("intro");
+  <div id="crosshair"></div>
 
-    let currentIndex = 0;
+  <div id="memoryCard">
+    <p id="memoryDate"></p>
+    <h2 id="memoryTitle"></h2>
+    <p id="memoryText"></p>
+  </div>
 
-    document.getElementById("enterBtn").addEventListener("click", () => {
-      intro.classList.add("hidden");
-      goToRoom(0);
-    });
-
-    function goToRoom(index) {
-      currentIndex = Math.max(0, Math.min(index, rooms.length - 1));
-      const target = rooms[currentIndex];
-
-      museum.scrollTo({
-        left: target.offsetLeft - (museum.clientWidth - target.clientWidth) / 2,
-        behavior: "smooth"
-      });
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
     }
+  }
+  </script>
 
-    document.getElementById("nextBtn").addEventListener("click", () => {
-      goToRoom(currentIndex + 1);
+  <script type="module">
+    import * as THREE from "three";
+    import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
+
+    const overlay = document.getElementById("overlay");
+    const startButton = document.getElementById("startButton");
+    const loading = document.getElementById("loading");
+    const memoryCard = document.getElementById("memoryCard");
+    const memoryDate = document.getElementById("memoryDate");
+    const memoryTitle = document.getElementById("memoryTitle");
+    const memoryText = document.getElementById("memoryText");
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x080605);
+    scene.fog = new THREE.Fog(0x080605, 8, 34);
+
+    const camera = new THREE.PerspectiveCamera(
+      72,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100
+    );
+    camera.position.set(0, 1.65, 9);
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      powerPreference: "high-performance"
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new PointerLockControls(camera, renderer.domElement);
+    scene.add(controls.getObject());
+
+    /* ---------- Lighting ---------- */
+
+    scene.add(new THREE.AmbientLight(0xffe9c4, 0.22));
+
+    const warmLight = new THREE.PointLight(0xffc978, 22, 22, 2);
+    warmLight.position.set(0, 4.2, 4);
+    scene.add(warmLight);
+
+    const galleryLight = new THREE.PointLight(0xffd9a0, 16, 30, 2);
+    galleryLight.position.set(0, 4.5, -4);
+    scene.add(galleryLight);
+
+    const blueAccent = new THREE.PointLight(0x6d8cff, 7, 22, 2);
+    blueAccent.position.set(-6, 3, -1);
+    scene.add(blueAccent);
+
+    const pinkAccent = new THREE.PointLight(0xff8ba7, 7, 22, 2);
+    pinkAccent.position.set(6, 3, -1);
+    scene.add(pinkAccent);
+
+    /* ---------- Museum room ---------- */
+
+    const floorMaterial = new THREE.MeshStandardMaterial({
+      color: 0x171310,
+      roughness: 0.85,
+      metalness: 0.05
     });
 
-    document.getElementById("prevBtn").addEventListener("click", () => {
-      goToRoom(currentIndex - 1);
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(30, 34),
+      floorMaterial
+    );
+    floor.rotation.x = -Math.PI / 2;
+    scene.add(floor);
+
+    const wallMaterial = new THREE.MeshStandardMaterial({
+      color: 0x1d1712,
+      roughness: 0.95
     });
 
-    // Detect which memory is closest to the centre
-    function updateActiveRoom() {
-      const museumCenter = museum.scrollLeft + museum.clientWidth / 2;
+    const backWall = new THREE.Mesh(
+      new THREE.PlaneGeometry(30, 9),
+      wallMaterial
+    );
+    backWall.position.set(0, 4.5, -8);
+    scene.add(backWall);
 
-      let closest = 0;
-      let closestDistance = Infinity;
+    const leftWall = new THREE.Mesh(
+      new THREE.PlaneGeometry(34, 9),
+      wallMaterial
+    );
+    leftWall.position.set(-15, 4.5, 0);
+    leftWall.rotation.y = Math.PI / 2;
+    scene.add(leftWall);
 
-      rooms.forEach((room, index) => {
-        const roomCenter = room.offsetLeft + room.offsetWidth / 2;
-        const distance = Math.abs(roomCenter - museumCenter);
+    const rightWall = new THREE.Mesh(
+      new THREE.PlaneGeometry(34, 9),
+      wallMaterial
+    );
+    rightWall.position.set(15, 4.5, 0);
+    rightWall.rotation.y = -Math.PI / 2;
+    scene.add(rightWall);
 
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closest = index;
-        }
-      });
+    const ceiling = new THREE.Mesh(
+      new THREE.PlaneGeometry(30, 34),
+      new THREE.MeshStandardMaterial({ color: 0x0d0a08 })
+    );
+    ceiling.rotation.x = Math.PI / 2;
+    ceiling.position.y = 9;
+    scene.add(ceiling);
 
-      currentIndex = closest;
+    // Subtle floor guide line
+    const guide = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.08, 30),
+      new THREE.MeshBasicMaterial({
+        color: 0xc9a227,
+        transparent: true,
+        opacity: 0.18
+      })
+    );
+    guide.rotation.x = -Math.PI / 2;
+    guide.position.set(0, 0.01, 0);
+    scene.add(guide);
 
-      rooms.forEach((room, index) => {
-        room.classList.toggle("active", index === currentIndex);
-      });
+    /* ---------- Memory data ---------- */
 
-      progress.textContent =
-        String(currentIndex + 1).padStart(2, "0") +
-        " / " +
-        String(rooms.length).padStart(2, "0");
-
-      // Play the active video, pause all others
-      videos.forEach((video, index) => {
-        const isActive = index === currentIndex;
-
-        if (isActive) {
-          video.play().catch(() => {
-            // Browser may block autoplay with sound; user can tap to play
-          });
-          video.closest(".video-wrap").classList.add("playing");
-        } else {
-          video.pause();
-          video.closest(".video-wrap").classList.remove("playing");
-        }
-      });
-    }
-
-    museum.addEventListener("scroll", () => {
-      updateActiveRoom();
-
-      if (museum.scrollLeft > 40) {
-        hint.style.opacity = "0";
+    const memories = [
+      {
+        video: "videos/memory1.mp4",
+        position: new THREE.Vector3(-7, 3.1, -7.85),
+        date: "Room 01 — The Beginning",
+        title: "The Day Everything Started",
+        text: "Write the story of this memory here. Where were you, what happened, and why does it still matter?"
+      },
+      {
+        video: "videos/memory2.mp4",
+        position: new THREE.Vector3(0, 3.1, -7.85),
+        date: "Room 02 — A Small Adventure",
+        title: "The Trip We Still Talk About",
+        text: "Add the place, the weather, the food, the joke, or the tiny detail you never want to forget."
+      },
+      {
+        video: "videos/memory3.mp4",
+        position: new THREE.Vector3(7, 3.1, -7.85),
+        date: "Room 03 — Ordinary Magic",
+        title: "An Ordinary Day That Felt Special",
+        text: "Sometimes the best memories are quiet ones—the moments that became meaningful only later."
       }
-    });
+    ];
 
-    // Let user tap a video if autoplay is blocked
-    videos.forEach(video => {
-      video.parentElement.addEventListener("click", () => {
-        if (video.paused) {
-          video.play();
-          video.closest(".video-wrap").classList.add("playing");
-        } else {
-          video.pause();
-          video.closest(".video-wrap").classList.remove("playing");
-        }
+    const videoMeshes = [];
+    const activeMemories = [];
+
+    function createMemoryExhibit(memory, index) {
+      const group = new THREE.Group();
+      group.position.copy(memory.position);
+
+      // Golden frame
+      const frame = new THREE.Mesh(
+        new THREE.BoxGeometry(5.4, 3.25, 0.16),
+        new THREE.MeshStandardMaterial({
+          color: 0x2b231a,
+          roughness: 0.55,
+          metalness: 0.25
+        })
+      );
+      group.add(frame);
+
+      const goldEdge = new THREE.Mesh(
+        new THREE.BoxGeometry(5.55, 3.4, 0.08),
+        new THREE.MeshStandardMaterial({
+          color: 0xc9a227,
+          roughness: 0.35,
+          metalness: 0.85
+        })
+      );
+      goldEdge.position.z = -0.06;
+      group.add(goldEdge);
+
+      // Video screen
+      const video = document.createElement("video");
+      video.src = memory.video;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = "auto";
+      video.crossOrigin = "anonymous";
+
+      const videoTexture = new THREE.VideoTexture(video);
+      videoTexture.colorSpace = THREE.SRGBColorSpace;
+      videoTexture.minFilter = THREE.LinearFilter;
+      videoTexture.magFilter = THREE.LinearFilter;
+
+      const screen = new THREE.Mesh(
+        new THREE.PlaneGeometry(5, 2.82),
+        new THREE.MeshBasicMaterial({
+          map: videoTexture,
+          toneMapped: false
+        })
+      );
+      screen.position.z = 0.09;
+      group.add(screen);
+
+      // Museum label
+      const labelCanvas = document.createElement("canvas");
+      labelCanvas.width = 1024;
+      labelCanvas.height = 256;
+
+      const ctx = labelCanvas.getContext("2d");
+      ctx.fillStyle = "#161310";
+      ctx.fillRect(0, 0, labelCanvas.width, labelCanvas.height);
+
+      ctx.fillStyle = "#c9a227";
+      ctx.font = "600 34px Inter, Arial";
+      ctx.fillText(memory.date.toUpperCase(), 45, 75);
+
+      ctx.fillStyle = "#f3e8d8";
+      ctx.font = "600 54px Georgia, serif";
+      ctx.fillText(memory.title, 45, 150);
+
+      ctx.fillStyle = "#a99f90";
+      ctx.font = "300 30px Inter, Arial";
+      ctx.fillText("Stand close to play this memory", 45, 210);
+
+      const labelTexture = new THREE.CanvasTexture(labelCanvas);
+      labelTexture.colorSpace = THREE.SRGBColorSpace;
+
+      const label = new THREE.Mesh(
+        new THREE.PlaneGeometry(3.4, 0.85),
+        new THREE.MeshBasicMaterial({ map: labelTexture })
+      );
+      label.position.set(0, 0.95, 0.1);
+      group.add(label);
+
+      // Soft spotlight above the frame
+      const spotlight = new THREE.PointLight(0xffd9a0, 9, 8, 2);
+      spotlight.position.set(0, 2.4, 1.6);
+      group.add(spotlight);
+
+      scene.add(group);
+
+      videoMeshes.push({
+        group,
+        screen,
+        video,
+        memory,
+        index
       });
-    });
 
-    // Keyboard navigation
+      activeMemories.push(false);
+    }
+
+    memories.forEach(createMemoryExhibit);
+
+    /* ---------- Walking ---------- */
+
+    const keys = {};
+    const walkSpeed = 3.2;
+    const clock = new THREE.Clock();
+
     document.addEventListener("keydown", event => {
-      if (event.key === "ArrowRight") goToRoom(currentIndex + 1);
-      if (event.key === "ArrowLeft") goToRoom(currentIndex - 1);
+      keys[event.code] = true;
     });
 
-    updateActiveRoom();
+    document.addEventListener("keyup", event => {
+      keys[event.code] = false;
+    });
+
+    function updateMovement() {
+      const delta = clock.getDelta();
+
+      if (!controls.isLocked) return;
+
+      if (keys["KeyW"] || keys["ArrowUp"]) controls.moveForward(walkSpeed * delta);
+      if (keys["KeyS"] || keys["ArrowDown"]) controls.moveForward(-walkSpeed * delta);
+      if (keys["KeyA"] || keys["ArrowLeft"]) controls.moveRight(-walkSpeed * delta);
+      if (keys["KeyD"] || keys["ArrowRight"]) controls.moveRight(walkSpeed * delta);
+
+      // Keep visitor inside the gallery
+      controls.getObject().position.x = THREE.MathUtils.clamp(
+        controls.getObject().position.x,
+        -13.5,
+        13.5
+      );
+
+      controls.getObject().position.z = THREE.MathUtils.clamp(
+        controls.getObject().position.z,
+        -6.5,
+        13
+      );
+
+      controls.getObject().position.y = 1.65;
+    }
+
+    /* ---------- Memory interaction ---------- */
+
+    function updateMemories() {
+      const playerPosition = controls.getObject().position;
+      let nearestIndex = -1;
+      let nearestDistance = Infinity;
+
+      videoMeshes.forEach((item, index) => {
+        const distance = playerPosition.distanceTo(item.group.position);
+
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearestIndex = index;
+        }
+
+        const shouldPlay = distance < 5.2;
+
+        if (shouldPlay && video.paused) {
+          video.play().catch(() => {});
+          activeMemories[index] = true;
+        } else if (!shouldPlay && !video.paused) {
+          video.pause();
+          activeMemories[index] = false;
+        }
+
+        // Make nearby screens gently glow
+        const glow = THREE.MathUtils.clamp(1 - distance / 12, 0, 1);
+        item.screen.material.color.setScalar(0.65 + glow * 0.35);
+      });
+
+      const nearest = videoMeshes[nearestIndex];
+
+      if (nearest && nearestDistance < 6.5) {
+        memoryDate.textContent = nearest.memory.date;
+        memoryTitle.textContent = nearest.memory.title;
+        memoryText.textContent = nearest.memory.text;
+        memoryCard.classList.add("visible");
+      } else {
+        memoryCard.classList.remove("visible");
+      }
+    }
+
+    /* ---------- Start and resize ---------- */
+
+    startButton.addEventListener("click", () => {
+      loading.style.display = "grid";
+
+      // Give videos a moment to begin loading
+      setTimeout(() => {
+        loading.style.display = "none";
+        overlay.classList.add("hidden");
+        controls.lock();
+      }, 700);
+    });
+
+    controls.addEventListener("unlock", () => {
+      overlay.classList.remove("hidden");
+    });
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    /* ---------- Animation loop ---------- */
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      updateMovement();
+      updateMemories();
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
   </script>
 </body>
 </html>
